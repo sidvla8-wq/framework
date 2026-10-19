@@ -7,6 +7,7 @@
 
 ## Установка
 - pip install djangorestframework pillow
+- pip install isort, black, flake8
 
 
 ## 30.1 Вьюсеты и дженерики
