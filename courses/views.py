@@ -1,6 +1,8 @@
-from rest_framework import viewsets, generics
+from rest_framework import generics, viewsets
+
 from .models import Course, Lesson
 from .serializers import CourseSerializer, LessonSerializer
+
 
 # Course: ViewSet (CRUD)
 class CourseViewSet(viewsets.ModelViewSet):
@@ -17,4 +19,3 @@ class LessonListCreateView(generics.ListCreateAPIView):
 class LessonDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
-    
