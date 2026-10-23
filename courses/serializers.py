@@ -50,3 +50,16 @@ class CourseSerializer(serializers.ModelSerializer):
 
     def get_lessons_count(self, obj):
         return obj.lessons.count()
+
+# Доп задание в задании 31
+
+
+class UserPublicProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'email', 'city']  # минимум публичной информации
+
+
+class UserPrivateProfileSerializer(UserProfileSerializer):
+    # полная версия, включая платежи
+    pass
