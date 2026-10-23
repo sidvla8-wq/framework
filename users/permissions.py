@@ -1,5 +1,5 @@
 from rest_framework import permissions
-from django.db.models import Q
+
 
 class IsModer(permissions.BasePermission):
     """Пользователь — модератор (состоит в группе 'moderators')"""
@@ -7,7 +7,7 @@ class IsModer(permissions.BasePermission):
     def has_permission(self, request, view):
         if not request.user.is_authenticated:
             return False
-        return request.user.groups.filter(name='moderators').exists()
+        return request.user.groups.filter(name="moderators").exists()
 
 
 class IsOwner(permissions.BasePermission):

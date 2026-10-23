@@ -1,36 +1,37 @@
+from datetime import timedelta  # <-- все импорты здесь
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+SECRET_KEY = "..."
+DEBUG = True
+ALLOWED_HOSTS = []
+
 INSTALLED_APPS = [
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    # DRF и зависимости
     "rest_framework",
+    "django_filters",
+    "rest_framework_simplejwt",
     "users",
-    "courses",  # приложение для курсов и уроков
-    "django_filters",  # 4 задание фильтрация списков платежей ДХ 30,2
-    'rest_framework',
-    'django_filters',
-    'users',
-    'courses',
-    'rest_framework_simplejwt', # Задание 31
+    "courses",
 ]
 
-# REST_FRAMEWORK = {
-#     "DEFAULT_PERMISSION_CLASSES": [
-#         "rest_framework.permissions.AllowAny",  # без авторизациипо заданию
-#     ],
-# }
-#
-# AUTH_USER_MODEL = "users.User"
-# Задание 31
-
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',  # по умолчанию всё закрыто
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
     ],
 }
 
-from datetime import timedelta
-
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 }
