@@ -19,7 +19,7 @@ class CourseViewSet(viewsets.ModelViewSet):
         if self.action in ('list', 'retrieve'):
             return [IsAuthenticated()]
         # Создание/изменение — тоже авторизованным,
-        # "модератор или владелец" проверяется на уровне объекта
+
         return [IsAuthenticated(), IsModerOrOwner()]
 
 
@@ -29,7 +29,6 @@ class LessonListCreateView(generics.ListCreateAPIView):
     filter_backends = [dj_filters.DjangoFilterBackend]
     filterset_fields = ['course']
     # Любой авторизованный может создать СВОЙ урок.
-    # Раньше стоял IsModer — это запрещало создавать уроки всем, кроме модераторов.
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
