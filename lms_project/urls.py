@@ -12,10 +12,12 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 # ]
 # Задание 31
 
+ROOT_URLCONF = 'lms_project.urls'
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/users/", include("users.urls")),
+    # path("api/users/", include("users.urls")),
+    path('api/', include('courses.urls')),
     path("api/courses/", include("courses.urls")),
     # Эндпоинты для JWT (доступны без авторизации)
     path("api/auth/login/", TokenObtainPairView.as_view(), name="token_obtain_pair"),

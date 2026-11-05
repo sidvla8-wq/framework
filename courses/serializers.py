@@ -1,29 +1,39 @@
 from rest_framework import serializers
+from django.core.exceptions import ValidationError
+from django.core.validators import URLValidator
 
-from .models import Course, Lesson
-
-
-class LessonSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Lesson
-        fields = "__all__"
+from .models import Course, Lesson, Subscription
 
 
 class CourseSerializer(serializers.ModelSerializer):
-    lessons_count = serializers.SerializerMethodField()
-    lessons = LessonSerializer(many=True, read_only=True)
-
     class Meta:
         model = Course
-        fields = [
-            "id",
-            "title",
-            "preview",
-            "description",
-            "owner",
-            "lessons_count",
-            "lessons",
-        ]
+        fields = '__all__'
+        read_only_fields = ('owner',)
 
-    def get_lessons_count(self, obj):
-        return obj.lessons.count()
+
+class LessonSerializer(serializers.ModelSerializer):
+    # owner заполняется автоматически из request.user
+    owner = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
+    class Meta:
+        model = Lesson
+        fields = '__all__'
+
+    def validate_video_url(self, value):
+        """Ссылка на видео должна быть валидным http/https URL"""
+        validator = URLValidator(schemes=['http', 'https'])
+        try:
+            validator(value)
+        except ValidationError:
+            raise serializers.ValidationError(
+                'Ссылка должна быть валидным URL (http/https).'
+            )
+        return value
+
+
+class SubscriptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Subscription
+        fields = '__all__'
+        read_only_fields = ('user',)
