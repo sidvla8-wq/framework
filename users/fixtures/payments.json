@@ -1,0 +1,22 @@
+[
+  {
+    "model": "users.payment",
+    "fields": {
+      "user": 1,
+      "paid_course": 1,
+      "paid_lesson": null,
+      "amount": "2500.00",
+      "method": "transfer"
+    }
+  },
+  {
+    "model": "users.payment",
+    "fields": {
+      "user": 2,
+      "paid_course": null,
+      "paid_lesson": 1,
+      "amount": "300.00",
+      "method": "cash"
+    }
+  }
+]
