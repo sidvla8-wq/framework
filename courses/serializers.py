@@ -37,3 +37,9 @@ class SubscriptionSerializer(serializers.ModelSerializer):
         model = Subscription
         fields = '__all__'
         read_only_fields = ('user',)
+
+class PaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Payment
+        fields = ['id', 'course', 'amount', 'currency', 'checkout_url', 'status']
+        read_only_fields = ['amount', 'currency', 'checkout_url', 'status']

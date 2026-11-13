@@ -11,6 +11,7 @@
 - pip install django-filter 
 - pip install djangorestframework-simplejwt
 - pip install coverage для задания 31,2
+- pip install drf-spectacular drf-spectacular-sidecar для 32,2
 
 
 ## 30.1 Вьюсеты и дженерики
@@ -26,5 +27,9 @@
 Выполнено согласно условию
 
 ## 32.1 Валидаторы, пагинация и тесты
+
+Выполнено согласно условию
+
+## 32.2 Документирование и безопасность
 
 Выполнено согласно условию
