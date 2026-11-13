@@ -52,16 +52,17 @@
 #     def __str__(self):
 #         return f"{self.user.email} — {self.course.title}"
 
-from django.db import models
 from django.contrib.auth import get_user_model
+from django.db import models
 
 User = get_user_model()
 
+
 class Payment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    course = models.ForeignKey('Course', on_delete=models.PROTECT)
+    course = models.ForeignKey("Course", on_delete=models.PROTECT)
     amount = models.PositiveIntegerField(help_text="Цена в копейках")
-    currency = models.CharField(max_length=3, default='rub')
+    currency = models.CharField(max_length=3, default="rub")
 
     stripe_product_id = models.CharField(max_length=100, blank=True, null=True)
     stripe_price_id = models.CharField(max_length=100, blank=True, null=True)
@@ -70,12 +71,12 @@ class Payment(models.Model):
 
     status = models.CharField(
         max_length=20,
-        default='pending',
+        default="pending",
         choices=[
-            ('pending', 'Ожидает оплаты'),
-            ('paid', 'Оплачено'),
-            ('cancelled', 'Отменено'),
-            ('failed', 'Ошибка'),
-        ]
+            ("pending", "Ожидает оплаты"),
+            ("paid", "Оплачено"),
+            ("cancelled", "Отменено"),
+            ("failed", "Ошибка"),
+        ],
     )
     created_at = models.DateTimeField(auto_now_add=True)

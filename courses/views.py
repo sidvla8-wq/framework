@@ -71,18 +71,24 @@
 #             message = 'Подписка добавлена'
 #
 #         return Response({'message': message})
+from django.conf import settings
 from rest_framework import generics, status
 from rest_framework.response import Response
+
 from .models import Course, Payment
 from .serializers import PaymentSerializer
-from .services.stripe_service import create_stripe_product, create_stripe_price, create_checkout_session
-from django.conf import settings
+from .services.stripe_service import (
+    create_checkout_session,
+    create_stripe_price,
+    create_stripe_product,
+)
+
 
 class CreatePaymentView(generics.CreateAPIView):
     serializer_class = PaymentSerializer
 
     def perform_create(self, serializer):
-        course = serializer.validated_data['course']
+        course = serializer.validated_data["course"]
         user = self.request.user
         amount_cents = course.price * 100  # цена в копейках
 
@@ -101,7 +107,7 @@ class CreatePaymentView(generics.CreateAPIView):
 
         # 3. Создаём сессию оплаты
         success_url = "http://127.0.0.1:8000/payment/success"  # для теста
-        cancel_url = "http://127.0.0.1:8000/payment/cancel"    # для теста
+        cancel_url = "http://127.0.0.1:8000/payment/cancel"  # для теста
 
         session = create_checkout_session(
             price_id=price.id,
@@ -119,6 +125,6 @@ class CreatePaymentView(generics.CreateAPIView):
             stripe_price_id=price.id,
             stripe_session_id=session.id,
             checkout_url=session.url,
-            status='pending',
+            status="pending",
         )
         serializer.save(id=payment.id)  # передаём id в ответ

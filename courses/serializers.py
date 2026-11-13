@@ -1,6 +1,6 @@
-from rest_framework import serializers
 from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
+from rest_framework import serializers
 
 from .models import Course, Lesson, Subscription
 
@@ -8,8 +8,8 @@ from .models import Course, Lesson, Subscription
 class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
-        fields = '__all__'
-        read_only_fields = ('owner',)
+        fields = "__all__"
+        read_only_fields = ("owner",)
 
 
 class LessonSerializer(serializers.ModelSerializer):
@@ -18,16 +18,16 @@ class LessonSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Lesson
-        fields = '__all__'
+        fields = "__all__"
 
     def validate_video_url(self, value):
         """Ссылка на видео должна быть валидным http/https URL"""
-        validator = URLValidator(schemes=['http', 'https'])
+        validator = URLValidator(schemes=["http", "https"])
         try:
             validator(value)
         except ValidationError:
             raise serializers.ValidationError(
-                'Ссылка должна быть валидным URL (http/https).'
+                "Ссылка должна быть валидным URL (http/https)."
             )
         return value
 
@@ -35,11 +35,12 @@ class LessonSerializer(serializers.ModelSerializer):
 class SubscriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subscription
-        fields = '__all__'
-        read_only_fields = ('user',)
+        fields = "__all__"
+        read_only_fields = ("user",)
+
 
 class PaymentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Payment
-        fields = ['id', 'course', 'amount', 'currency', 'checkout_url', 'status']
-        read_only_fields = ['amount', 'currency', 'checkout_url', 'status']
+        fields = ["id", "course", "amount", "currency", "checkout_url", "status"]
+        read_only_fields = ["amount", "currency", "checkout_url", "status"]
