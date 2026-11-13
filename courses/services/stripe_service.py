@@ -14,7 +14,7 @@ def create_stripe_product(name: str, description: str = ""):
 def create_stripe_price(product_id: str, unit_amount_cents: int, currency: str = 'rub'):
     """
     Создаёт цену в Stripe.
-    unit_amount_cents — цена в копейках (умножь цену курса на 100).
+    unit_amount_cents — цена в копейках (умножить цену курса на 100).
     """
     price = stripe.Price.create(
         product=product_id,
