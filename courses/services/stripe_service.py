@@ -26,7 +26,7 @@ def create_stripe_price(product_id: str, unit_amount_cents: int, currency: str =
 def create_checkout_session(price_id: str, success_url: str, cancel_url: str):
     """
     Создаёт сессию оплаты.
-    success_url — куда вернёт после успешной оплаты (можно заглушку).
+    success_url — куда вернёт после успешной оплаты
     cancel_url — если пользователь закрыл окно оплаты.
     """
     session = stripe.CheckoutSession.create(
