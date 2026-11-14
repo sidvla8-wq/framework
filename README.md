@@ -12,6 +12,11 @@
 - pip install djangorestframework-simplejwt
 - pip install coverage для задания 31,2
 - pip install drf-spectacular drf-spectacular-sidecar для 32,2
+- poetry add django djangorestframework drf-yasg stripe
+- poetry add python-dotenv pillow
+- poetry add psycopg2-binary
+- poetry add redis celery
+- poetry add djangorestframework-simplejwt django-filter
 
 
 ## 30.1 Вьюсеты и дженерики
