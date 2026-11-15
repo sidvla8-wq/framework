@@ -71,47 +71,54 @@
 #             message = 'Подписка добавлена'
 #
 #         return Response({'message': message})
-from rest_framework import generics, status
+from rest_framework import generics
 from rest_framework.response import Response
+
 from .models import Course, Payment
 from .serializers import PaymentSerializer
-from .services.stripe_service import create_stripe_product, create_stripe_price, create_checkout_session
+from .services.stripe_service import (
+    create_stripe_product,
+    create_stripe_price,
+    create_checkout_session,
+    retrieve_checkout_session,
+)
 from django.conf import settings
+
 
 class CreatePaymentView(generics.CreateAPIView):
     serializer_class = PaymentSerializer
+    queryset = Payment.objects.all()
 
-    def perform_create(self, serializer):
-        course = serializer.validated_data['course']
-        user = self.request.user
-        amount_cents = course.price * 100  # цена в копейках
+    def create(self, request, *args, **kwargs):
+        serializer = PaymentSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
-        # 1. Создаём продукт в Stripe
+        course = serializer.validated_data["course"]
+        amount_cents = int(course.price * 100)  # цена в копейках
+
+        # 1. Продукт в Stripe
         product = create_stripe_product(
             name=course.title,
             description=course.description or "Курс на платформе",
         )
 
-        # 2. Создаём цену в Stripe
+        # 2. Цена в Stripe (копейки, привязка к product)
         price = create_stripe_price(
             product_id=product.id,
             unit_amount_cents=amount_cents,
             currency=settings.STRIPE_CURRENCY,
         )
 
-        # 3. Создаём сессию оплаты
-        success_url = "http://127.0.0.1:8000/payment/success"  # для теста
-        cancel_url = "http://127.0.0.1:8000/payment/cancel"    # для теста
-
+        # 3. Сессия оплаты
         session = create_checkout_session(
             price_id=price.id,
-            success_url=success_url,
-            cancel_url=cancel_url,
+            success_url="http://127.0.0.1:8000/payment/success",
+            cancel_url="http://127.0.0.1:8000/payment/cancel",
         )
 
-        # 4. Сохраняем платёж в своей БД
+        # 4. Один платёж в своей БД со всеми данными Stripe
         payment = Payment.objects.create(
-            user=user,
+            user=request.user,
             course=course,
             amount=amount_cents,
             currency=settings.STRIPE_CURRENCY,
@@ -119,6 +126,9 @@ class CreatePaymentView(generics.CreateAPIView):
             stripe_price_id=price.id,
             stripe_session_id=session.id,
             checkout_url=session.url,
-            status='pending',
+            status="pending",
         )
-        serializer.save(id=payment.id)  # передаём id в ответ
+
+        # возвращаем сериализованный созданный объект — в нём будет и ссылка
+        output = PaymentSerializer(payment)
+        return Response(output.data, status=201)

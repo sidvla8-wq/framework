@@ -1,10 +1,16 @@
 from datetime import timedelta
 from pathlib import Path
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
+
+SECRET_KEY = os.getenv("SECRET_KEY")
+STRIPE_API_KEY = os.getenv("STRIPE_API_KEY")
+STRIPE_CURRENCY = "rub"
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = "..."
 DEBUG = True
 ALLOWED_HOSTS = []
 
@@ -26,14 +32,7 @@ INSTALLED_APPS = [
     'drf_spectacular',
 ]
 
-# REST_FRAMEWORK = {
-#     "DEFAULT_AUTHENTICATION_CLASSES": (
-#         "rest_framework_simplejwt.authentication.JWTAuthentication",
-#     ),
-#     "DEFAULT_PERMISSION_CLASSES": [
-#         "rest_framework.permissions.IsAuthenticated",
-#     ],
-# }
+
 
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
